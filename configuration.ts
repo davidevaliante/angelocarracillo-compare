@@ -7,6 +7,7 @@ export interface Config {
     fontString : string
     font : string
     youtubeMetatag? : string
+    geoApi : string
 }
 
 export const configuration : Config = {
@@ -17,5 +18,6 @@ export const configuration : Config = {
     secondaryColor : '#3a81de',
     fontString : "https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&display=swap",
     font : 'Roboto',
+    geoApi: 'https://api.ipgeolocation.io/ipgeo?apiKey=d9c8ca199b3f40fabc69dfdfefdc9aa2',
 }
 

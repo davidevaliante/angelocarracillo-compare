@@ -36,11 +36,12 @@ const index: FunctionComponent<Props> = ({ streamerData }) => {
 	}, [])
 
 	const geoLocate = async () => {
-		setCountry('it')
+		const userCountryRequest = await axios.get(configuration.geoApi)
+		const countryCode = lowerCase(userCountryRequest.data.country_code2)
+		setCountry(countryCode)
 	}
 
 	const getBonusList = async () => {
-		console.log(`started at ${new Date().getTime()}`)
 		let bonusForCountry = streamerData.countryBonusList.filter(
 			it => it.label === country
 		)
@@ -55,15 +56,7 @@ const index: FunctionComponent<Props> = ({ streamerData }) => {
 			.filter(it => it.label === country)[0]
 			.ordering.split(' ')
 
-		// const requests = bonusForCountry[0].bonuses.map((b) =>
-		//   axios.get(`${configuration.api}/bonuses/${b.id}`)
-		// );
-
-		// const bList = await Promise.all(requests);
-		// let unorderedBonuses = bList.map((r) => r.data as StreamerBonus);
-
 		let unorderedBonuses = [...streamerData.bonuses]
-		console.log(unorderedBonuses, 'ub')
 
 		let ordered: StreamerBonus[] = []
 
@@ -79,7 +72,7 @@ const index: FunctionComponent<Props> = ({ streamerData }) => {
 			}
 		})
 
-		setBonuses([...ordered, ...unorderedBonuses])
+		setBonuses([...ordered])
 		setLoading(false)
 	}
 
@@ -91,21 +84,10 @@ const index: FunctionComponent<Props> = ({ streamerData }) => {
 					<img className='logo' src='/icons/app_icon.svg' />
 				</div>
 
-				<h1>Comparazione offerte di siti legali in Italia:</h1>
+				<h1>Comparazione offerte siti legali:</h1>
 
 				{bonuses &&
-					bonuses.length > 2 &&
 					bonuses.map((bonus: StreamerBonus) => (
-						<BonusStripe
-							key={`${bonus.name}`}
-							bonus={bonus}
-							countryCode={country}
-						/>
-					))}
-
-				{bonuses &&
-					bonuses.length <= 2 &&
-					streamerData.bonuses.map((bonus: StreamerBonus) => (
 						<BonusStripe
 							key={`${bonus.name}`}
 							bonus={bonus}
